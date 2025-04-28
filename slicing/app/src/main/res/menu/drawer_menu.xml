@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/dashboard"
+            android:title="@string/dashboard" />
+
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/about_us"
+            android:title="@string/aboutUs" />
+
+        <item
+            android:id="@+id/nav_patient"
+            android:icon="@drawable/patient"
+            android:title="@string/patient" />
+
+        <item
+            android:id="@+id/nav_result_mcu"
+            android:icon="@drawable/mcu_result"
+            android:title="@string/mcuDashboard" />
+
+        <item
+            android:id="@+id/nav_recap"
+            android:icon="@drawable/recap_icon"
+            android:title="@string/recap" />
+
+        <item
+            android:id="@+id/nav_report"
+            android:icon="@drawable/report_icon"
+            android:title="@string/report" />
+
+        <item
+            android:id="@+id/nav_our_service"
+            android:icon="@drawable/our_service"
+            android:title="@string/ourService" />
+
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/contact_icon"
+            android:title="@string/contact" />
+    </group>
+</menu>

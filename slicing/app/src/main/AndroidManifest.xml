@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Occuhelp"
+        tools:targetApi="31">
+        <activity
+            android:name=".recap.RecapActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".findmcuresult.FindMcuResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".findpatient.FindPatientActivity"
+            android:exported="false" />
+        <activity
+            android:name=".resultdetails.ResultDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mcuresult.McuResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".patientdetail.PatientDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ourservice.OurServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".aboutus.AboutUsActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".report.ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".contact.ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".updatedpassword.UpdatedPassword"
+            android:exported="false" />
+        <activity
+            android:name=".resetpassword.ResetPasswordActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".forgotpassword.ForgotPasswordActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".dashboard.DashboardActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

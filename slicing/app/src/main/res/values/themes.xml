@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Occuhelp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorOutline">@color/outline_custom</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
+
+    <style name="CustomOutlinedButtonStyle" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/outline_custom</item>
+
+        <item name="strokeWidth">1dp</item>
+
+        <item name="android:textColor">@color/outline_custom</item>
+    </style>
+
+    <style name="Theme.Occuhelp" parent="Base.Theme.Occuhelp" />
+</resources>
