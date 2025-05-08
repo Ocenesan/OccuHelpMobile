@@ -1,8 +1,13 @@
 package com.example.occuhelp.LogIn
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -15,6 +20,7 @@ fun GantiKataSandiScreen() {
     var oldPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -50,8 +56,15 @@ fun GantiKataSandiScreen() {
             onValueChange = { oldPassword = it },
             label = { Text("Kata Sandi Lama") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
         )
+        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(
+                imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                contentDescription = if (passwordVisible) "Hide password" else "Show password"
+            )
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -60,8 +73,15 @@ fun GantiKataSandiScreen() {
             onValueChange = { newPassword = it },
             label = { Text("Kata Sandi Baru") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
         )
+        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(
+                imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                contentDescription = if (passwordVisible) "Hide password" else "Show password"
+            )
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
 

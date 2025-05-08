@@ -9,9 +9,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +44,7 @@ class LogInActivity : ComponentActivity() {
 fun LoginScreen() {
     var nip by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -116,7 +124,14 @@ fun LoginScreen() {
                 onValueChange = { password = it },
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(color =
-                    Color(0xFF009ECF))
+                    Color(0xFF009ECF)),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+            )
+        }
+        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(
+                imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                contentDescription = if (passwordVisible) "Hide password" else "Show password"
             )
         }
 
@@ -130,6 +145,13 @@ fun LoginScreen() {
                 containerColor = Color(0xFF009ECF)
             )
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.baseline_login_24),
+                contentDescription = "Login Icon",
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(end = 8.dp)
+            )
             Text(text = "LOGIN", fontWeight = FontWeight.SemiBold, color = Color.White)
         }
 
