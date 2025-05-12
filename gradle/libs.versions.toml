@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.2"
+constraintlayoutCompose = "1.1.1"
 converterGson = "2.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
@@ -14,6 +15,7 @@ activityCompose = "1.10.1"
 composeBom = "2025.04.01"
 loggingInterceptor = "4.9.3"
 materialIconsExtended = "1.7.8"
+materialVersion = "1.8.1"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
 constraintlayout = "2.2.1"
@@ -25,9 +27,11 @@ navigationFragmentKtxVersion = "2.8.9"
 navigationUiKtxVersion = "2.8.9"
 
 [libraries]
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx"}
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx"}
+androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended"}
 converter-gson = { module = "com.squareup.retrofit2:converter.gson", version.ref = "converterGson"}
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -301,7 +301,8 @@ fun PatientListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "Info Button"
+                        contentDescription = "Info Button",
+                        tint = Color(0xFFD9D9D9)
                     )
                 }
             }
