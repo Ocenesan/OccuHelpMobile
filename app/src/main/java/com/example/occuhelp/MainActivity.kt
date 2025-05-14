@@ -1,58 +1,110 @@
 package com.example.occuhelp
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import com.example.occuhelp.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.occuhelp.ui.OccuHelpTheme
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            OccuHelpTheme {
+                val navController = rememberNavController()
+                var currentLoginError by remember { mutableStateOf<LoginPopUpType?>(null) }
+                val context = LocalContext.current // For showing Toasts or other context-dependent actions
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+                // In a real app, you'd likely use Jetpack Navigation here.
+                // For simplicity, we're directly calling LoginScreen.
+                // If you had navigation, ForgotPasswordScreen would be another destination.
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.Login.route
+                ){
+                    composable(Screen.Login.route) {
+                        LoginScreen(
+                            currentLoginError = currentLoginError,
+                            onDismissErrorDialog = {
+                                currentLoginError = null // Clear the error when dialog is dismissed
+                            },
+                            onLoginClicked = { nip, password ->
+                                // Clear previous error before attempting login
+                                currentLoginError = null
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+                                // 1. Cek Koneksi Internet Terlebih Dahulu
+                                if (!isNetworkAvailable(context)) {
+                                    currentLoginError = LoginPopUpType.NETWORK_ERROR
+                                    return@LoginScreen // Keluar lebih awal jika tidak ada internet
+                                }
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+                                if (nip.isBlank() || password.isBlank()) {
+                                    currentLoginError = LoginPopUpType.EMPTY_TEXTFIELD
+                                } else {
+                                    currentLoginError = LoginPopUpType.WRONG_CREDENTIALS
+                                    println("Login attempt failed for NIP: $nip, Password: $password")
+                                }
+                            },
+                            onChangePasswordClicked = {
+                                navController.navigate(Screen.ForgotPassword.route)
+                            }
+                        )
+                    }
+                    composable(Screen.ForgotPassword.route) {
+                        ForgotPasswordScreen(
+                            currentLoginError = currentLoginError,
+                            onDismissErrorDialog = {
+                                currentLoginError = null // Clear the error when dialog is dismissed
+                            },
+                            onBackClicked = {
+                                // Aksi untuk kembali ke layar sebelumnya (LoginScreen)
+                                navController.popBackStack()
+                            },
+                            onSendLinkClicked = { email ->
+                                currentLoginError = null
+                                if (!isNetworkAvailable(context)) {
+                                    currentLoginError = LoginPopUpType.NETWORK_ERROR
+                                    return@ForgotPasswordScreen // Keluar lebih awal jika tidak ada internet
+                                }
+                                navController.popBackStack()
+                            }
+                        )
+                    }
+                }
+            }
         }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23 (Marshmallow) ke atas
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork =
+                connectivityManager.getNetworkCapabilities(network) ?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                // Anda juga bisa memeriksa NET_CAPABILITY_VALIDATED untuk koneksi internet yang benar-benar aktif
+                activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) -> true
+                else -> false
+            }
+        } else { // API di bawah 23
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            return networkInfo.isConnected
+        }
     }
 }
