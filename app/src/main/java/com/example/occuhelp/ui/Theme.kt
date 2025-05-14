@@ -78,6 +78,11 @@ val AppTypography = Typography(
         fontSize = 16.sp
         // Warna akan diambil dari colorScheme.primary atau colorScheme.onSurface saat digunakan sebagai label
     ),
+    titleLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
+    ),
     bodyLarge = TextStyle( // Teks Input di TextField
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,

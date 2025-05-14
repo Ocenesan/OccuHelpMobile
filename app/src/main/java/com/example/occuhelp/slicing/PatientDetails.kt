@@ -1,5 +1,8 @@
 package com.example.occuhelp.slicing
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +31,17 @@ import com.example.occuhelp.R
 import com.example.occuhelp.ui.OccuHelpBackButtonBackground
 import com.example.occuhelp.ui.OccuHelpBackButtonIcon
 import com.example.occuhelp.ui.OccuHelpTheme
+
+class PatientDetailsActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            OccuHelpTheme {
+                PatientDetailsScreen()
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,7 +137,7 @@ fun PatientDetailsScreen() {
                 modifier = Modifier
                     .background(
                         MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = MaterialTheme.shapes.medium
                     )
                     .padding(horizontal = 10.dp, vertical = 4.dp)
             )
