@@ -38,6 +38,7 @@ val OccuHelpInputText = Color.Black
 val OccuHelpInverseSurface = Color(0xFFF2FAFC)
 val OccuHelpInverseOnSurface = Color(0xFF8AD3E5)
 val OccuHelpPrimaryContainer = Color(0xFFE6F6F9)
+val OccuHelpSecondaryContainer = Color(0xFF298BA3)
 
 // Warna spesifik UI yang mungkin tidak masuk ColorScheme secara langsung (gunakan dengan hati-hati)
 val OccuHelpBackButtonBackground = Color(0xFFC1D6E6) // GrayishBlue
@@ -71,6 +72,11 @@ val AppTypography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 32.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = Nunito,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
     ),
     titleMedium = TextStyle( // Untuk Label di TextField
         fontFamily = OpenSans,
@@ -156,7 +162,8 @@ private val LightColorScheme = lightColorScheme(
     outline = OccuHelpOutline,
     inverseSurface = OccuHelpInverseSurface,
     inverseOnSurface = OccuHelpInverseOnSurface,
-    primaryContainer = OccuHelpPrimaryContainer
+    primaryContainer = OccuHelpPrimaryContainer,
+    secondaryContainer = OccuHelpSecondaryContainer
 
     // Anda bisa menambahkan warna lain seperti error, inversePrimary, dll.
 )
