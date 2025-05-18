@@ -90,4 +90,7 @@ dependencies {
 
     //Navigate
     implementation(libs.androidx.navigation.compose)
+
+    //Chart
+    implementation(libs.ycharts)
 }

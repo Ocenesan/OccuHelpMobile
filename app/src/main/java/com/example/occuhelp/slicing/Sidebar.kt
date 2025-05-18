@@ -130,7 +130,6 @@ fun Sidebar() {
             }
         }
 
-
         Spacer(modifier = Modifier.height(6.dp))
 
         // Menu
