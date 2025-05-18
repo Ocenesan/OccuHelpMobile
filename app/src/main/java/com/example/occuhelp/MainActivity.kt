@@ -24,11 +24,8 @@ class MainActivity : ComponentActivity() {
             OccuHelpTheme {
                 val navController = rememberNavController()
                 var currentLoginError by remember { mutableStateOf<LoginPopUpType?>(null) }
-                val context = LocalContext.current // For showing Toasts or other context-dependent actions
+                val context = LocalContext.current
 
-                // In a real app, you'd likely use Jetpack Navigation here.
-                // For simplicity, we're directly calling LoginScreen.
-                // If you had navigation, ForgotPasswordScreen would be another destination.
                 NavHost(
                     navController = navController,
                     startDestination = Screen.Login.route
@@ -98,7 +95,6 @@ class MainActivity : ComponentActivity() {
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                // Anda juga bisa memeriksa NET_CAPABILITY_VALIDATED untuk koneksi internet yang benar-benar aktif
                 activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) -> true
                 else -> false
             }
