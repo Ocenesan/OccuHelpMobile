@@ -18,13 +18,14 @@ import androidx.compose.ui.unit.dp
 import com.example.occuhelp.ui.OccuHelpBackButtonBackground
 import com.example.occuhelp.ui.OccuHelpBackButtonIcon
 
-@OptIn(ExperimentalMaterial3Api::class) // Diperlukan untuk OutlinedTextFieldDefaults
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
     onBackClicked: () -> Unit = {},
-    onSendLinkClicked: (String) -> Unit = {},
-    currentLoginError: LoginPopUpType?, // Changed from Boolean to LoginErrorType?
-    onDismissErrorDialog: () -> Unit
+    onSendLinkClicked: (String) -> Unit,
+    currentLoginError: LoginPopUpType?,
+    onDismissErrorDialog: () -> Unit,
+    isLoading: Boolean
 ) {
     var email by remember { mutableStateOf("") }
 
@@ -33,7 +34,6 @@ fun ForgotPasswordScreen(
             errorType = errorType,
             onDismissRequest = onDismissErrorDialog,
             onConfirmClick = onDismissErrorDialog
-            // You could also make confirmButtonText dynamic based on errorType here if needed
         )
     }
 
@@ -48,7 +48,8 @@ fun ForgotPasswordScreen(
             onClick = { onBackClicked() },
             modifier = Modifier
                 .size(44.dp)
-                .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium)
+                .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium),
+            enabled = !isLoading
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -100,7 +101,8 @@ fun ForgotPasswordScreen(
                 cursorColor = MaterialTheme.colorScheme.primary,
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
             ),
-            textStyle = MaterialTheme.typography.bodyLarge
+            textStyle = MaterialTheme.typography.bodyLarge,
+            enabled = !isLoading
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -114,7 +116,8 @@ fun ForgotPasswordScreen(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(48.dp),
+            enabled = !isLoading
         ) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_verified_24), // Ensure this drawable exists
@@ -139,9 +142,10 @@ fun PreviewForgotPasswordScreen() {
     OccuHelpTheme {
         ForgotPasswordScreen(
             onBackClicked = {},
-            onSendLinkClicked = {},
+            onSendLinkClicked = {_ ->},
             currentLoginError = null,
-            onDismissErrorDialog = {}
+            onDismissErrorDialog = {},
+            isLoading = true
         )
     }
 }
@@ -152,9 +156,10 @@ fun PreviewForgotPasswordScreenWithError() {
     OccuHelpTheme {
         ForgotPasswordScreen(
             onBackClicked = {},
-            onSendLinkClicked = {},
+            onSendLinkClicked = {_ ->},
             currentLoginError = LoginPopUpType.NETWORK_ERROR, // Example error
-            onDismissErrorDialog = {}
+            onDismissErrorDialog = {},
+            isLoading = false
         )
     }
 }
