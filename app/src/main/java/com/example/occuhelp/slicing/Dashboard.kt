@@ -282,9 +282,6 @@ fun BarChartData(
 
             if (maxPointModel != null && maxPointModel.point.y > 0f) {
 
-                val xOffsetPx = 200f
-                val yOffsetPx = 60f
-                val textWidthPx = 100f
                     Box(modifier = Modifier
                         .padding(horizontal = 143.dp)
                         .fillMaxSize()) {
@@ -296,8 +293,8 @@ fun BarChartData(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .absoluteOffset(
-                                    x = with(LocalDensity.current) { (xOffsetPx - (textWidthPx / 2) - 20f ).toDp() },
-                                    y = with(LocalDensity.current) { (yOffsetPx - 20f - 10.dp.toPx()).toDp() }
+                                    x = with(LocalDensity.current) { (190f - (100f / 2) - 20f ).toDp() },
+                                    y = with(LocalDensity.current) { (65f - 20f - 10.dp.toPx()).toDp() }
                                 )
                                 .background(
                                     color = Color.Black.copy(alpha = 0.8f),

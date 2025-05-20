@@ -31,7 +31,7 @@ class MCUResultActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OccuHelpTheme {
-                PatientDetailsScreen()
+                McuResultScreen()
             }
         }
     }

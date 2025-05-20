@@ -88,7 +88,7 @@ fun PatientDetailsScreen() {
 
         Text(
             text = "Detail Pasien",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.constrainAs(patientTitle) {
                 top.linkTo(backButton.top)

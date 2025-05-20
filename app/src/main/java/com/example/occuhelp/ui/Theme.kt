@@ -40,6 +40,7 @@ val OccuHelpInverseOnSurface = Color(0xFF8AD3E5)
 val OccuHelpPrimaryContainer = Color(0xFFE6F6F9)
 val OccuHelpSecondaryContainer = Color(0xFF298BA3)
 val OccuHelpSurfaceVariant = Color(0xFF305879)
+val OccuHelpOutlineVariant = Color(0xFFC9EBF3)
 
 // Warna spesifik UI yang mungkin tidak masuk ColorScheme secara langsung (gunakan dengan hati-hati)
 val OccuHelpBackButtonBackground = Color(0xFFC1D6E6) // GrayishBlue
@@ -170,7 +171,8 @@ private val LightColorScheme = lightColorScheme(
     inverseOnSurface = OccuHelpInverseOnSurface,
     primaryContainer = OccuHelpPrimaryContainer,
     secondaryContainer = OccuHelpSecondaryContainer,
-    surfaceVariant = OccuHelpSurfaceVariant
+    surfaceVariant = OccuHelpSurfaceVariant,
+    outlineVariant = OccuHelpOutlineVariant
 
     // Anda bisa menambahkan warna lain seperti error, inversePrimary, dll.
 )
