@@ -43,7 +43,10 @@ class RecapActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OccuHelpTheme {
-                RecapScreen()
+                RecapScreen(
+                    barChartData = recapData,
+                    tableData = dataRecap
+                )
             }
         }
     }
@@ -55,7 +58,11 @@ val dataRecap= listOf(
 )
 
 @Composable
-fun RecapScreen(modifier: Modifier = Modifier) {
+fun RecapScreen(
+    modifier: Modifier = Modifier,
+    barChartData: List<BarChartRecapModel>,
+    tableData: List<Triple<Int, String, Int>>
+) {
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
@@ -184,7 +191,8 @@ fun RecapScreen(modifier: Modifier = Modifier) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 width = Dimension.fillToConstraints
-            }
+            },
+            recapData = recapData
         )
         Column(
             modifier = modifier.constrainAs(tableLayout) {
@@ -201,7 +209,7 @@ fun RecapScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun TableLayoutRecap(
-    RecapScreen: List<Triple<Int, String, Int>>,
+    data: List<Triple<Int, String, Int>>,
     modifier : Modifier = Modifier
 ) {
     Column(
@@ -235,11 +243,11 @@ fun TableLayoutRecap(
             )
         }
         LazyColumn {
-            items(RecapScreen, key = {it.first}) {
+            items(data, key = {it.first}) { item ->
                 TableListItem(
-                    id = it.first,
-                    kategori = it.second,
-                    jumlah = it.third
+                    id = item.first,
+                    kategori = item.second,
+                    jumlah = item.third
                 )
             }
         }
@@ -302,7 +310,8 @@ val recapData = listOf(
 
 @Composable
 fun BarChartData(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    recapData: List<BarChartRecapModel>
 ) {
     Column(
         modifier = modifier
@@ -432,7 +441,11 @@ fun BarChartData(
 @Composable
 fun RecapPreview() {
     OccuHelpTheme {
-        RecapScreen()
+        RecapScreen(
+            barChartData = recapData,
+            tableData = dataRecap
+
+        )
     }
 }
 
