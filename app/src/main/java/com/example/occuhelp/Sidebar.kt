@@ -135,10 +135,10 @@ fun Sidebar(
             SidebarMenuItemData(Icons.Filled.Info, "Tentang Kami", Screen.AboutUs.route),
             SidebarMenuItemData(Icons.Filled.Group, "Pasien", Screen.Pasien.route),
             SidebarMenuItemData(Icons.Filled.MonitorHeart, "Hasil MCU", Screen.HasilMCU.route),
-            //SidebarMenuItemData(Icons.Filled.BarChart, "Rekapitulasi", Screen.Rekapitulasi.route),
+            SidebarMenuItemData(Icons.Filled.BarChart, "Rekapitulasi", Screen.Rekapitulasi.route),
             SidebarMenuItemData(Icons.Filled.Flag, "Report", Screen.Report.route),
-            //SidebarMenuItemData(Icons.Filled.HeadsetMic, "Layanan Kami", Screen.LayananKami.route),
-            //SidebarMenuItemData(Icons.Filled.Call, "Kontak", Screen.Kontak.route)
+            SidebarMenuItemData(Icons.Filled.HeadsetMic, "Layanan Kami", Screen.Layanan.route),
+            SidebarMenuItemData(Icons.Filled.Call, "Kontak", Screen.Kontak.route)
         )
 
         menuItems.forEach { item ->

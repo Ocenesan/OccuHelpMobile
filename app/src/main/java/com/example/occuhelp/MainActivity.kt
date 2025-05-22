@@ -60,8 +60,7 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(Screen.Login.route) { // Darurat: kembali ke login
                                             popUpTo(0) { inclusive = true }
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         // Untuk rute sidebar lainnya
                                         navController.navigate(route) {
                                             popUpTo(Screen.HomePage.route) { saveState = true }
@@ -169,6 +168,13 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        composable(Screen.UbahPassword.route) {
+                            UbahPasswordScreen(
+                                onBackClicked = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
                         composable(Screen.HomePage.route) { navBackStackEntry ->
                             DashboardScreen(
                                 userSessionViewModel = userSessionViewModel,
@@ -181,6 +187,28 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.AboutUs.route){
                             AboutUsScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.Pasien.route) {
+                            PasienScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.Kontak.route) {
+                            KontakScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.Layanan.route) {
+                            LayananKamiScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.Report.route) {
+                            ReportScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.HasilMCU.route) {
+                            HasilMCUScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(Screen.Rekapitulasi.route) {
+                            RekapitulasiScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                barChartData = recapData,
+                                tableData = dataRecap
+                            )
                         }
                     }
                 }
