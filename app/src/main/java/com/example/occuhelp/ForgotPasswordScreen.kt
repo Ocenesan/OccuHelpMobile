@@ -117,21 +117,25 @@ fun ForgotPasswordScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            enabled = !isLoading
+            enabled = !isLoading && email.isNotBlank()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_verified_24), // Ensure this drawable exists
-                contentDescription = "Verifikasi icon",
-                modifier = Modifier
-                    .size(28.dp)
-                    .padding(end = 8.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-            )
+            if (isLoading) {
+                CircularProgressIndicator(/*...*/)
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_verified_24), // Ensure this drawable exists
+                    contentDescription = "Verifikasi icon",
+                    modifier = Modifier
+                        .size(28.dp)
+                        .padding(end = 8.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                )
 
-            Text(
-                text = "Kirim Link Verifikasi",
-                style = MaterialTheme.typography.labelLarge, // Made consistent with LoginScreen button
-            )
+                Text(
+                    text = "Kirim Link Verifikasi",
+                    style = MaterialTheme.typography.labelLarge, // Made consistent with LoginScreen button
+                )
+            }
         }
     }
 }
@@ -146,20 +150,6 @@ fun PreviewForgotPasswordScreen() {
             currentLoginError = null,
             onDismissErrorDialog = {},
             isLoading = true
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewForgotPasswordScreenWithError() {
-    OccuHelpTheme {
-        ForgotPasswordScreen(
-            onBackClicked = {},
-            onSendLinkClicked = {_ ->},
-            currentLoginError = LoginPopUpType.NETWORK_ERROR, // Example error
-            onDismissErrorDialog = {},
-            isLoading = false
         )
     }
 }

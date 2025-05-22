@@ -6,10 +6,10 @@ import retrofit2.Response
 interface ApiService {
 
     // ========== Auth Routes ==========
-    @POST("/api/login")
+    @POST("login")
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
-    @GET("/api/users")
+    @GET("users")
     suspend fun getUsers(): Response<List<User>>
 
     @GET("/api/user")
