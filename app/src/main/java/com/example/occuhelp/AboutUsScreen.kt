@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -49,7 +49,7 @@ import com.example.occuhelp.ui.OccuHelpTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutUsScreen(modifier: Modifier = Modifier) {
+fun AboutUsScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {}) {
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
@@ -104,7 +104,7 @@ fun AboutUsScreen(modifier: Modifier = Modifier) {
         )
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { onNavigateBack() },
             modifier = Modifier
                 .size(44.dp)
                 .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium)
@@ -114,7 +114,7 @@ fun AboutUsScreen(modifier: Modifier = Modifier) {
                 }
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
                 tint = OccuHelpBackButtonIcon, // Gunakan warna UI spesifik
                 modifier = Modifier.size(28.dp)
@@ -362,6 +362,6 @@ fun AboutUsScreen(modifier: Modifier = Modifier) {
 @Composable
 fun AboutUsScreenPreview() {
     OccuHelpTheme {
-        AboutUsScreen()
+        AboutUsScreen(onNavigateBack = {})
     }
 }

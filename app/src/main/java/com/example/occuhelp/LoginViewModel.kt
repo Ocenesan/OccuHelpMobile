@@ -31,6 +31,8 @@ class LoginViewModel : ViewModel() {
     private val _loginEvent = MutableSharedFlow<LoginEvent>()
     val loginEvent = _loginEvent.asSharedFlow() // Gunakan asSharedFlow untuk membuatnya read-only dari luar
 
+    private val _loggedInUserName = MutableStateFlow<String?>(null)
+
     fun onLoginClicked(nip: String, password: String, context: Context) {
         _loginError.value = null // Reset error
 
@@ -52,6 +54,7 @@ class LoginViewModel : ViewModel() {
 
                 if (response.isSuccessful && response.body() != null) {
                     val authResponse = response.body()!!
+                    _loggedInUserName.value = authResponse.user.name
                     println("Login successful: Token: ${authResponse.token}, User: ${authResponse.user.name}")
                     // TODO: Simpan token (misal di SharedPreferences atau DataStoreViewModel)
                     // Contoh: dataStoreManager.saveAuthToken(authResponse.token)
@@ -92,6 +95,16 @@ class LoginViewModel : ViewModel() {
 
     fun dismissErrorDialog() {
         _loginError.value = null
+    }
+
+    fun performLogoutCleanup() {
+        _loggedInUserName.value = null
+        // TODO: Hapus token otentikasi yang tersimpan (dari DataStore/SharedPreferences)
+        // Contoh jika Anda memiliki DataStoreManager:
+        // viewModelScope.launch {
+        //     dataStoreManager.clearAuthToken()
+        // }
+        println("User session data cleared (simulated).")
     }
 
     // Fungsi helper untuk memeriksa ketersediaan jaringan (bisa dipindahkan ke utility class)
