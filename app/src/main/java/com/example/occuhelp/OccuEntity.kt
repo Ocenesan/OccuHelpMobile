@@ -70,6 +70,12 @@ data class PasswordToken(
     val createdAt: Timestamp?
 )
 
+data class PatientsResponse(
+    val patients: List<Patient>
+    // Jika ada field lain di level root objek JSON, tambahkan di sini
+    // misalnya: val total_pages: Int?, val current_page: Int?, dll.
+)
+
 data class Patient(
     val id: Int,
     @SerializedName("med_record_id")
@@ -87,7 +93,9 @@ data class Patient(
     @SerializedName("created_at")
     val createdAt: String,
     @SerializedName("updated_at")
-    val updatedAt: String
+    val updatedAt: String,
+    @SerializedName("examination_date")
+    val examDate: String?
 )
 
 data class McuPatient(
@@ -100,10 +108,10 @@ data class McuPatient(
     @SerializedName("examination_type")
     val examType: String,
     val status: McuStatus,
-    @SerializedName("created_at")
-    val createdAt: String,
-    @SerializedName("updated_at")
-    val updatedAt: String
+//    @SerializedName("created_at")
+//    val createdAt: String,
+//    @SerializedName("updated_at")
+//    val updatedAt: String
 )
 
 enum class McuStatus {
@@ -120,8 +128,8 @@ data class McuResult(
     val result: String,
     @SerializedName("result_date")
     val resultDate: String, // Format: "YYYY-MM-DD"
-    @SerializedName("created_at")
-    val createdAt: String,
-    @SerializedName("updated_at")
-    val updatedAt: String
+//    @SerializedName("created_at")
+//    val createdAt: String,
+//    @SerializedName("updated_at")
+//    val updatedAt: String
 )

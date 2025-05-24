@@ -38,7 +38,7 @@ interface ApiService {
 
     // ========== Patients ==========
     @GET("patients")
-    suspend fun getPatients(): Response<List<Patient>>
+    suspend fun getPatients(): Response<PatientsResponse>
 
     @GET("patients/{id}")
     suspend fun getPatientById(@Path("id") id: Int): Response<Patient>
