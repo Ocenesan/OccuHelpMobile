@@ -52,6 +52,7 @@ import kotlin.math.min
 fun PasienScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
+    onNavigateToDetail: (patientId: Int) -> Unit,
     pasienViewModel: PasienViewModel = viewModel()
 ) {
     val uiState by pasienViewModel.uiState.collectAsStateWithLifecycle()
@@ -119,7 +120,7 @@ fun PasienScreen(
                                     patient = patient,
                                     onInfoClicked = {
                                         println("Info clicked for patient ID: ${patient.id}")
-                                        // TODO: Navigasi ke DetailPasienScreen(patient.id)
+                                        onNavigateToDetail(patient.id)
                                     }
                                 )
                             }
@@ -448,6 +449,9 @@ fun PatientListItem(
 @Composable
 fun PasienScreenPreview() {
     OccuHelpTheme {
-        PasienScreen(onNavigateBack = {})
+        PasienScreen(
+            onNavigateBack = {},
+            onNavigateToDetail = {}
+        )
     }
 }

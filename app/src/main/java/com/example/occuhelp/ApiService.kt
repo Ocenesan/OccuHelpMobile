@@ -43,18 +43,12 @@ interface ApiService {
     @GET("patients/{id}")
     suspend fun getPatientById(@Path("id") id: Int): Response<Patient>
 
-    @DELETE("patients/{id}")
-    suspend fun deletePatient(@Path("id") id: Int): Response<Void>
-
     // ========== MCU Patients ==========
     @GET("mcu-patients")
     suspend fun getMcuPatients(): Response<List<McuPatient>>
 
     @GET("mcu-patients/{id}")
     suspend fun getMcuPatient(@Path("id") id: Int): Response<McuPatient>
-
-    @DELETE("mcu-patients/{id}")
-    suspend fun deleteMcuPatient(@Path("id") id: Int): Response<Void>
 
     // ========== MCU Results ==========
     @GET("mcu-results")
@@ -65,7 +59,4 @@ interface ApiService {
 
     @GET("mcu-results/{id}")
     suspend fun getMcuResult(@Path("id") id: Int): Response<McuResult>
-
-    @DELETE("mcu-results/{id}")
-    suspend fun deleteMcuResult(@Path("id") id: Int): Response<Void>
 }

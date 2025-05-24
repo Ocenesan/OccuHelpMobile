@@ -189,7 +189,11 @@ class MainActivity : ComponentActivity() {
                             AboutUsScreen(onNavigateBack = { navController.popBackStack() })
                         }
                         composable(Screen.Pasien.route) {
-                            PasienScreen(onNavigateBack = { navController.popBackStack() })
+                            PasienScreen(onNavigateBack = { navController.popBackStack() },
+                                onNavigateToDetail = { patientId ->
+                                    navController.navigate(Screen.DetailPasien.createRoute(patientId))
+                                }
+                            )
                         }
                         composable(Screen.Kontak.route) {
                             KontakScreen(onNavigateBack = { navController.popBackStack() })
@@ -208,6 +212,14 @@ class MainActivity : ComponentActivity() {
                                 onNavigateBack = { navController.popBackStack() },
                                 barChartData = recapData,
                                 tableData = dataRecap
+                            )
+                        }
+                        composable(
+                            Screen.DetailPasien.route,
+                            arguments = Screen.DetailPasien.arguments
+                        ) { backStackEntry ->
+                            DetailPasienScreen(
+                                onNavigateBack = { navController.popBackStack() }
                             )
                         }
                     }
