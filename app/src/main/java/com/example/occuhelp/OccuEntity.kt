@@ -133,3 +133,11 @@ data class McuResult(
 //    @SerializedName("updated_at")
 //    val updatedAt: String
 )
+
+data class McuResultsResponse(
+    // Ganti nama "results" jika properti di JSON berbeda
+    val results: List<McuResult> // Atau nama properti yang sesuai dari JSON API
+    // Misalnya jika JSON nya: { "data_mcu": [...] } maka:
+    // @SerializedName("data_mcu")
+    // val mcuResultsList: List<McuResult>
+)

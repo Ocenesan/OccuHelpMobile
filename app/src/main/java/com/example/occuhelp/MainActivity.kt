@@ -215,12 +215,22 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            Screen.DetailPasien.route,
+                            route = Screen.DetailPasien.route,
                             arguments = Screen.DetailPasien.arguments
-                        ) { backStackEntry ->
+                        ) {
                             DetailPasienScreen(
-                                onNavigateBack = { navController.popBackStack() }
+                                onNavigateBack = { navController.popBackStack() },
+                                // Tambahkan callback untuk navigasi ke Detail MCU
+                                onNavigateToMcuResults = { patientId, patientName ->
+                                    navController.navigate(Screen.DetailMCU.createRoute(patientId, patientName))
+                                }
                             )
+                        }
+                        composable(
+                            Screen.DetailMCU.route,
+                            arguments = Screen.DetailMCU.arguments
+                        ) { backStackEntry ->
+                            DetailHasilMCUScreen(onNavigateBack = { navController.popBackStack() })
                         }
                     }
                 }

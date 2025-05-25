@@ -64,6 +64,7 @@ fun formatDateString(isoDateString: String?, outputFormat: String = "dd MMMM yyy
 @Composable
 fun DetailPasienScreen(
     onNavigateBack: () -> Unit = {},
+    onNavigateToMcuResults: (patientId: Int, patientName: String) -> Unit,
     detailPasienViewModel: DetailPasienViewModel = viewModel()
 ) {
     val uiState by detailPasienViewModel.uiState.collectAsStateWithLifecycle()
@@ -224,7 +225,10 @@ fun DetailPasienScreen(
                     horizontalArrangement = Arrangement.End
                 ) {
                     OutlinedButton(
-                        onClick = { /* Action */ },
+                        onClick = {
+                            android.util.Log.d("DETAIL_PASIEN_NAV", "Navigating to MCU results for ID: ${patient.id}, Name: '${patient.name}'")
+                            onNavigateToMcuResults(patient.id, patient.name)
+                        },
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                         shape = MaterialTheme.shapes.medium,
                         colors = ButtonDefaults.outlinedButtonColors(
@@ -300,6 +304,9 @@ fun DetailRow(label: String, value: String) {
 @Composable
 fun DetailPasienScreenPreview() {
     OccuHelpTheme {
-        DetailPasienScreen(onNavigateBack = {})
+        DetailPasienScreen(
+            onNavigateBack = {},
+            onNavigateToMcuResults = {_,_ -> }
+        )
     }
 }

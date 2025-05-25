@@ -21,9 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -132,13 +131,11 @@ fun HasilMCUScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {
                 width = Dimension.fillToConstraints
                 height = Dimension.wrapContent
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            colors = OutlinedTextFieldDefaults.colors(
                 unfocusedLabelColor = Color.Black,
                 focusedLabelColor = Color.Black,
                 unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
                 focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                placeholderColor = MaterialTheme.colorScheme.secondary,
-                leadingIconColor = MaterialTheme.colorScheme.secondary,
             ),
             shape = RoundedCornerShape(10.dp),
             placeholder = {
@@ -291,7 +288,7 @@ fun PatientListItem1(
                     )
                 }
             }
-            Divider(
+            HorizontalDivider(
                 color = Color.LightGray,
                 thickness = 1.dp,
                 modifier = modifier.fillMaxWidth()
