@@ -5,11 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,17 +38,9 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
     ) {
         val (backButton, imageContact, card1,
             guideline1, guideline2, guideline3) = createRefs()
-        var email by remember {
-            mutableStateOf("")
-        }
-        var telephoneNumber by remember {
-            mutableStateOf("")
-        }
-        var message by remember {
-            mutableStateOf("")
-        }
-
-        var interactionSource by remember  {mutableStateOf("")}
+        var email by remember { mutableStateOf("") }
+        var telephoneNumber by remember { mutableStateOf("") }
+        var message by remember { mutableStateOf("") }
 
         val topGuideline = createGuidelineFromTop(0.03f)
         val startGuideline = createGuidelineFromStart(0.05f)
@@ -101,7 +92,7 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                 .zIndex(1f)
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
                 tint = OccuHelpBackButtonIcon, // Gunakan warna UI spesifik
                 modifier = Modifier.size(28.dp)
@@ -140,20 +131,27 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                    placeholder = {
-                        Text(
-                            "Email",
-                            color = Color.White,
-                            style = MaterialTheme.typography.bodyLarge,) },
                     modifier = modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.secondary, shape = MaterialTheme.shapes.medium),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone
                     ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    label = {
+                        Text(
+                            "Email",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.White
+                        )
+                    },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    placeholder = {
+                        Text(
+                            "Masukkan email anda",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodyMedium) },
+                    colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent
                     )
@@ -164,20 +162,27 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                 OutlinedTextField(
                     value = telephoneNumber,
                     onValueChange = { telephoneNumber = it },
+                    label = {
+                        Text(
+                            "No. Telp",
+                            style = MaterialTheme.typography.bodyLarge, // Font & size dari titleMedium
+                            color = MaterialTheme.colorScheme.onPrimary // Warna label
+                        )
+                    },
                     singleLine = true,
                     shape = MaterialTheme.shapes.medium,
                     placeholder = {
                         Text(
-                            "Nomor Telepon",
+                            "No. Telepon",
                             color = Color.White,
-                            style = MaterialTheme.typography.bodyLarge,) },
+                            style = MaterialTheme.typography.bodyMedium) },
                     modifier = modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.secondary, shape = MaterialTheme.shapes.medium),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone
                     ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent
                     )
@@ -188,6 +193,13 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                 OutlinedTextField(
                     value = message,
                     onValueChange = { message = it },
+                    label = {
+                        Text(
+                            "Pesan dan Saran",
+                            style = MaterialTheme.typography.bodyLarge, // Font & size dari titleMedium
+                            color = MaterialTheme.colorScheme.onPrimary // Warna label
+                        )
+                    },
                     singleLine = false,
                     maxLines = 10,
                     shape = MaterialTheme.shapes.medium,
@@ -195,7 +207,7 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                         Text(
                             "Ketik Pesan Anda Di Sini...",
                             color = Color.White,
-                            style = MaterialTheme.typography.bodyLarge,) },
+                            style = MaterialTheme.typography.bodyMedium,) },
                     modifier = modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.secondary, shape = MaterialTheme.shapes.medium)
@@ -203,7 +215,7 @@ fun KontakScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {})
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent
                     )

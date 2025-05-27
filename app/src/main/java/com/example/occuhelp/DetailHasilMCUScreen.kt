@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.occuhelp.ui.OccuHelpBackButtonBackground
@@ -185,15 +184,14 @@ fun DetailHasilMCUScreen(
                 ) {
                     Text(
                         text = state.patientName ?: "Nama Pasien Tidak Tersedia",
-                        style = MaterialTheme.typography.titleLarge, // Ganti ke titleLarge atau yang sesuai
+                        style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f), // Agar bisa wrap jika panjang
                     )
                     Text(
-                        text = "#Hasil MCU", // Ganti label jika perlu
+                        text = "#Biodata Pasien", // Ganti label jika perlu
                         color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 8.sp,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .background(
                                 MaterialTheme.colorScheme.primary, // Ganti warna background label
@@ -258,7 +256,7 @@ fun TableLayoutMCU(
                 text = "No.",
                 style = MaterialTheme.typography.titleSmall, // Style untuk header
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(0.7f), // Sesuaikan weight
                 textAlign = TextAlign.Center
             )
@@ -266,14 +264,14 @@ fun TableLayoutMCU(
                 text = "Kategori",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(2.5f), // Sesuaikan weight
             )
             Text(
-                text = "Hasil", // Ganti dari "Hasil Analisa"
+                text = "Hasil Analisa", // Ganti dari "Hasil Analisa"
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1.8f), // Sesuaikan weight
                 textAlign = TextAlign.Center // Pusatkan hasil jika perlu
             )
@@ -281,7 +279,7 @@ fun TableLayoutMCU(
                 text = "Tanggal",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(2f), // Sesuaikan weight
                 textAlign = TextAlign.Center
             )
@@ -312,8 +310,8 @@ fun TableListItemMCU(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                if (isEvenRow) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
-                else MaterialTheme.colorScheme.surface // Atau Color.Transparent
+                if (isEvenRow) MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.2f)
+                else MaterialTheme.colorScheme.inverseSurface // Atau Color.Transparent
             )
             .padding(vertical = 10.dp, horizontal = 8.dp), // Sesuaikan padding
         verticalAlignment = Alignment.CenterVertically
@@ -323,24 +321,28 @@ fun TableListItemMCU(
             modifier = Modifier
                 .weight(0.7f)
                 .wrapContentWidth(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.bodyMedium // Style untuk isi tabel
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = mcuResult.category,
             modifier = Modifier.weight(2.5f),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = mcuResult.result,
             modifier = Modifier.weight(1.8f),
             style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = formatResultDate(mcuResult.resultDate, "dd/MM/yy"), // Format tanggal lebih pendek
             modifier = Modifier.weight(2f),
             style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

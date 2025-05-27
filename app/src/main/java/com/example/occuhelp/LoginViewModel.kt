@@ -3,7 +3,6 @@ package com.example.occuhelp
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -32,6 +31,9 @@ class LoginViewModel : ViewModel() {
     val loginEvent = _loginEvent.asSharedFlow() // Gunakan asSharedFlow untuk membuatnya read-only dari luar
 
     private val _loggedInUserName = MutableStateFlow<String?>(null)
+
+    private val _showChangePasswordConfirmationDialog = MutableStateFlow(false)
+    val showChangePasswordConfirmationDialog: StateFlow<Boolean> = _showChangePasswordConfirmationDialog.asStateFlow()
 
     fun onLoginClicked(nip: String, password: String, context: Context) {
         _loginError.value = null // Reset error
@@ -88,9 +90,18 @@ class LoginViewModel : ViewModel() {
     }
 
     fun onForgotPasswordClicked() {
+        _showChangePasswordConfirmationDialog.value = true
+    }
+
+    fun onConfirmChangePassword() {
+        _showChangePasswordConfirmationDialog.value = false // Tutup dialog
         viewModelScope.launch {
-            _loginEvent.emit(LoginEvent.NavigateToForgotPassword)
+            _loginEvent.emit(LoginEvent.NavigateToForgotPassword) // Kirim event untuk navigasi
         }
+    }
+
+    fun onDismissChangePasswordConfirmation() {
+        _showChangePasswordConfirmationDialog.value = false
     }
 
     fun dismissErrorDialog() {
@@ -112,19 +123,14 @@ class LoginViewModel : ViewModel() {
     private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val activeNetwork =
-                connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-            return networkInfo.isConnected
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork =
+            connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
         }
     }
 }

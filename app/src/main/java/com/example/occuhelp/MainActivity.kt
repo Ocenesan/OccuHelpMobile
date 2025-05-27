@@ -33,6 +33,38 @@ class MainActivity : ComponentActivity() {
                 val loginViewModel: LoginViewModel = viewModel()
                 val forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
                 val userSessionViewModel: UserSessionViewModel = viewModel()
+                val showChangePasswordDialog by loginViewModel.showChangePasswordConfirmationDialog.collectAsStateWithLifecycle()
+
+                if (showChangePasswordDialog) {
+                    ConfirmationDialog(
+                        confirmationType = LoginPopUpType.GANTI_PASSWORD, // Pastikan GANTI_PASSWORD ada di LoginPopUpType
+                        confirmButtonText = "Ya",
+                        dismissButtonText = "Batal",
+                        onDismissRequest = { loginViewModel.onDismissChangePasswordConfirmation() },
+                        onConfirm = {
+                            loginViewModel.onConfirmChangePassword() // ViewModel akan handle event navigasi
+                        },
+                        onDismiss = { loginViewModel.onDismissChangePasswordConfirmation() }
+                    )
+                }
+
+                // Mengobservasi event navigasi dari ViewModel
+                LaunchedEffect(Unit) { // Key bisa Unit jika hanya ingin diluncurkan sekali
+                    loginViewModel.loginEvent.collect { event ->
+                        when (event) {
+                            is LoginEvent.NavigateToHome -> {
+                                userSessionViewModel.setUser(event.userName)
+                                Toast.makeText(context, "Login berhasil! Selamat datang ${event.userName}", Toast.LENGTH_LONG).show()
+                                navController.navigate(Screen.HomePage.route) {
+                                    popUpTo(Screen.Login.route) { inclusive = true }
+                                }
+                            }
+                            is LoginEvent.NavigateToForgotPassword -> {
+                                navController.navigate(Screen.ForgotPassword.route)
+                            }
+                        }
+                    }
+                }
 
                 ModalNavigationDrawer(
                     drawerState = drawerState,
@@ -98,30 +130,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.Login.route
                     ){
                         composable(Screen.Login.route) {
-                            // Instansiasi LoginViewModel
-                            val loginViewModel: LoginViewModel = viewModel()
-                            // Observasi state dari ViewModel
                             val isLoading by loginViewModel.isLoading.collectAsStateWithLifecycle()
                             val loginError by loginViewModel.loginError.collectAsStateWithLifecycle()
 
-                            // Mengobservasi event navigasi dari ViewModel
-                            LaunchedEffect(Unit) { // Key bisa Unit jika hanya ingin diluncurkan sekali
-                                loginViewModel.loginEvent.collect { event ->
-                                    when (event) {
-                                        is LoginEvent.NavigateToHome -> {
-                                            userSessionViewModel.setUser(event.userName)
-                                            Toast.makeText(context, "Login berhasil! Selamat datang ${event.userName}", Toast.LENGTH_LONG).show()
-                                            navController.navigate(Screen.HomePage.route) {
-                                                popUpTo(Screen.Login.route) { inclusive = true }
-                                            }
-                                        }
-                                        is LoginEvent.NavigateToForgotPassword -> {
-                                            navController.navigate(Screen.ForgotPassword.route)
-                                        }
-                                        // Tambahkan penanganan event lain jika ada
-                                    }
-                                }
-                            }
                             LoginScreen(
                                 currentLoginError = loginError,
                                 onDismissErrorDialog = { loginViewModel.dismissErrorDialog() },

@@ -37,18 +37,21 @@ import com.example.occuhelp.ui.OccuHelpTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit = {}) {
+fun LayananKamiScreen(
+    modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit = {}
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         ConstraintLayout(
             modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
         ) {
-            val (backButton, ourService, icon, card1, card2, card3, card4, card5, card6, guideline1, guideline2, guideline3) = createRefs()
+            val (backButton, ourService, icon, card1, card2, card3, card4, card5, card6) = createRefs()
             var expanded1 by remember {
                 mutableStateOf(false)
             }
@@ -62,43 +65,8 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 mutableStateOf(false)
             }
 
-            val topGuideline = createGuidelineFromTop(0.03f)
-            val startGuideline = createGuidelineFromStart(0.05f)
-            val endGuideline = createGuidelineFromEnd(0.05f)
-
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.White)
-                    .constrainAs(guideline1) {
-                        top.linkTo(topGuideline)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-            )
-            Box(
-                modifier = modifier
-                    .fillMaxHeight()
-                    .width(1.dp)
-                    .background(Color.White)
-                    .constrainAs(guideline2) {
-                        start.linkTo(startGuideline)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-            )
-            Box(
-                modifier = modifier
-                    .fillMaxHeight()
-                    .width(1.dp)
-                    .background(Color.White)
-                    .constrainAs(guideline3) {
-                        end.linkTo(endGuideline)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-            )
+            val startGuideline = createGuidelineFromStart(0f)
+            val endGuideline = createGuidelineFromEnd(0f)
 
             IconButton(
                 onClick = { onNavigateBack() },
@@ -106,8 +74,8 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                     .size(44.dp)
                     .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium)
                     .constrainAs(backButton) { // ← Tambahkan ini!
-                        top.linkTo(topGuideline)
-                        start.linkTo(startGuideline)
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
                     }
             ) {
                 Icon(
@@ -124,8 +92,8 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = modifier.constrainAs(ourService) {
                     top.linkTo(backButton.top)
-                    start.linkTo(backButton.end, margin = 16.dp)
                     bottom.linkTo(backButton.bottom)
+                    start.linkTo(backButton.end, margin = 16.dp)
                 }
             )
 
@@ -133,8 +101,8 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 painter = painterResource(id = R.drawable.layanan),
                 contentDescription = "Icon",
                 modifier = modifier
-                    .heightIn(107.dp)
-                    .widthIn(192.dp)
+                    .height(107.dp)
+                    .width(192.dp)
                     .constrainAs(icon) {
                         top.linkTo(ourService.bottom, margin = 24.dp)
                         start.linkTo(startGuideline)
@@ -147,11 +115,11 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
 
             Card(
                 modifier = modifier.constrainAs(card1) {
-                    start.linkTo(startGuideline)
-                    end.linkTo(endGuideline)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                     top.linkTo(icon.bottom, margin = (-8).dp)
                     width = Dimension.fillToConstraints
-                    height = Dimension.wrapContent
+                    //height = Dimension.wrapContent
                 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = MaterialTheme.shapes.medium,
@@ -188,10 +156,10 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 modifier = modifier
                     .constrainAs(card2) {
                         top.linkTo(card1.bottom, margin = 24.dp)
-                        start.linkTo(startGuideline)
-                        end.linkTo(endGuideline)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
-                        height = Dimension.wrapContent
+                        //height = Dimension.wrapContent
                     }
                     .clickable { expanded1 = !expanded1 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -237,10 +205,10 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 modifier = modifier
                     .constrainAs(card3) {
                         top.linkTo(card2.bottom, margin = 16.dp)
-                        start.linkTo(startGuideline)
-                        end.linkTo(endGuideline)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
-                        height = Dimension.wrapContent
+                        //height = Dimension.wrapContent
                     }
                     .clickable { expanded2 = !expanded2 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -269,7 +237,7 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                             modifier = Modifier.size(36.dp))
                     }
                     AnimatedVisibility(
-                        visible = expanded1
+                        visible = expanded2
                     ) {
                         Text(
                             text = "Lorem ipsum sir dolor amet",
@@ -286,10 +254,10 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 modifier = modifier
                     .constrainAs(card4) {
                         top.linkTo(card3.bottom, margin = 16.dp)
-                        start.linkTo(startGuideline)
-                        end.linkTo(endGuideline)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
-                        height = Dimension.wrapContent
+                        //height = Dimension.wrapContent
                     }
                     .clickable { expanded3 = !expanded3 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -318,7 +286,7 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                             modifier = Modifier.size(36.dp))
                     }
                     AnimatedVisibility(
-                        visible = expanded1
+                        visible = expanded3
                     ) {
                         Text(
                             text = "Lorem ipsum sir dolor amet",
@@ -335,10 +303,10 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                 modifier = modifier
                     .constrainAs(card5) {
                         top.linkTo(card4.bottom, margin = 16.dp)
-                        start.linkTo(startGuideline)
-                        end.linkTo(endGuideline)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
-                        height = Dimension.wrapContent
+                        //height = Dimension.wrapContent
                     }
                     .clickable { expanded4 = !expanded4 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -367,7 +335,7 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
                             modifier = Modifier.size(36.dp))
                     }
                     AnimatedVisibility(
-                        visible = expanded1
+                        visible = expanded4
                     ) {
                         Text(
                             text = "Lorem ipsum sir dolor amet",
@@ -383,11 +351,11 @@ fun LayananKamiScreen(modifier: Modifier = Modifier, onNavigateBack: () -> Unit 
             Card(
                 modifier = modifier.constrainAs(card6) {
                     top.linkTo(card5.bottom, margin = 24.dp)
-                    start.linkTo(startGuideline)
-                    end.linkTo(endGuideline)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom, margin = 16.dp)
                     width = Dimension.fillToConstraints
-                    height = Dimension.wrapContent
+                    //height = Dimension.wrapContent
                 },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = MaterialTheme.shapes.medium,
