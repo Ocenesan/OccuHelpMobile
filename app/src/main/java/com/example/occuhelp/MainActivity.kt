@@ -258,9 +258,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.Rekapitulasi.route) {
                             RekapitulasiScreen(
-                                onNavigateBack = { navController.popBackStack() },
-                                barChartData = recapData,
-                                tableData = dataRecap
+                                onNavigateBack = { navController.popBackStack() }
                             )
                         }
                         composable(

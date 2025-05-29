@@ -141,3 +141,161 @@ data class McuResultsResponse(
     // @SerializedName("data_mcu")
     // val mcuResultsList: List<McuResult>
 )
+
+data class McuRawDataItem(
+    val id: Int?, // Buat nullable jika ada kemungkinan tidak ada
+    @SerializedName("mcu_patient_id")
+    val mcuPatientId: Int?,
+    val name: String?,
+    @SerializedName("Jenis Kelamin")
+    val jenisKelamin: String?,
+    @SerializedName("Usia")
+    val usia: Int?, // Atau Double? jika bisa desimal, lalu konversi
+    @SerializedName("examination_date")
+    val examinationDate: String?,
+    val unit: String?,
+    val jabatan: String?,
+    val ketenagaan: String?,
+    val saran: String?,
+    @SerializedName("BB (Kg)")
+    val bbKg: String?, // String karena bisa jadi ada teks, parse ke Double nanti
+    @SerializedName("TB (Cm)")
+    val tbCm: String?, // String, parse ke Double
+    @SerializedName("IMT")
+    val imt: String?, // String, parse ke Double
+    @SerializedName("Kategori IMT")
+    val kategoriImt: String?,
+    @SerializedName("Tekanan Darah")
+    val tekananDarah: String?, // Format "Sistolik/Diastolik"
+    @SerializedName("Kategori Tekanan Darah")
+    val kategoriTekananDarah: String?,
+    @SerializedName("Riwayat Kesehatan Pribadi")
+    val riwayatKesehatanPribadi: String?,
+    @SerializedName("Riwayat Kesehatan Keluarga")
+    val riwayatKesehatanKeluarga: String?,
+    @SerializedName("Anamnesa")
+    val anamnesa: String?,
+    @SerializedName("Merokok")
+    val merokok: String?,
+    @SerializedName("Alkohol")
+    val alkohol: String?,
+    @SerializedName("EKG")
+    val ekg: String?,
+    @SerializedName("Kreatinin")
+    val kreatinin: String?, // String, parse ke Double
+    @SerializedName("Egfr")
+    val egfr: String?, // String, parse ke Double
+    @SerializedName("Ureum")
+    val ureum: String?, // String, parse ke Double
+    @SerializedName("Glukosa Puasa")
+    val glukosaPuasa: String?, // String, parse ke Double
+    @SerializedName("Asam Urat")
+    val asamUrat: String?, // String, parse ke Double
+    @SerializedName("Basofil")
+    val basofil: String?,
+    @SerializedName("Eosinofil")
+    val eosinofil: String?,
+    @SerializedName("Hb")
+    val hb: String?, // String, parse ke Double
+    @SerializedName("Hematokrit")
+    val hematokrit: String?,
+    @SerializedName("Trombosit")
+    val trombosit: String?,
+    @SerializedName("Eritrosit (Urine)") // Nama field unik jika ada Eritrosit darah
+    val eritrositUrine: String?,
+    @SerializedName("Lekosit")
+    val lekosit: String?,
+    @SerializedName("Mch")
+    val mch: String?,
+    @SerializedName("Mchc")
+    val mchc: String?,
+    @SerializedName("Mcv")
+    val mcv: String?,
+    @SerializedName("Limfosit")
+    val limfosit: String?,
+    @SerializedName("Monosit")
+    val monosit: String?,
+    @SerializedName("Neutrofil")
+    val neutrofil: String?,
+    @SerializedName("Neutrofil Limfosit Ratio")
+    val neutrofilLimfositRatio: String?,
+    @SerializedName("Rdw-Cv")
+    val rdwCv: String?,
+    @SerializedName("Koles Hdl")
+    val kolesHdl: String?, // String, parse ke Double
+    @SerializedName("Koles Ldl")
+    val kolesLdl: String?, // String, parse ke Double
+    @SerializedName("Trigliserid")
+    val trigliserid: String?, // String, parse ke Double
+    @SerializedName("Sgot")
+    val sgot: String?, // String, parse ke Double
+    @SerializedName("Sgpt")
+    val sgpt: String?, // String, parse ke Double
+    @SerializedName("Kolesterol") // Ini Kolesterol Total
+    val kolesterolTotal: String?, // String, parse ke Double, mungkin ada teks "Borderline"
+    @SerializedName("pH")
+    val phUrine: String?,
+    @SerializedName("Warna")
+    val warnaUrine: String?,
+    @SerializedName("Kejernihan")
+    val kejernihanUrine: String?,
+    @SerializedName("Lekosit (Urine)")
+    val lekositUrine: String?,
+    @SerializedName("Epitel")
+    val epitelUrine: String?,
+    @SerializedName("Bakteri")
+    val bakteriUrine: String?,
+    @SerializedName("Silinder")
+    val silinderUrine: String?,
+    @SerializedName("Kristal")
+    val kristalUrine: String?,
+    @SerializedName("Berat Jenis")
+    val beratJenisUrine: String?,
+    @SerializedName("Protein")
+    val proteinUrine: String?,
+    @SerializedName("Glukosa (Urine)")
+    val glukosaUrine: String?,
+    @SerializedName("Keton")
+    val ketonUrine: String?,
+    @SerializedName("Darah (Urine)")
+    val darahUrine: String?,
+    @SerializedName("Bilirubin")
+    val bilirubinUrine: String?,
+    @SerializedName("Urobilinogen")
+    val urobilinogenUrine: String?,
+    @SerializedName("Nitrit")
+    val nitritUrine: String?,
+    @SerializedName("Lekosit Esterase")
+    val lekositEsteraseUrine: String?,
+    @SerializedName("Rasio Albumin/Kreatinin")
+    val rasioAlbuminKreatinin: String?,
+    @SerializedName("Laboratorium (Summary)")
+    val laboratoriumSummary: String?,
+    @SerializedName("Radiologi")
+    val radiologi: String?,
+    @SerializedName("Pemeriksaan Fisik")
+    val pemeriksaanFisik: String?,
+    @SerializedName("Visus")
+    val visus: String?,
+    @SerializedName("Buta Warna")
+    val butaWarna: String?
+    // Tambahkan field lain jika ada
+)
+
+// Data class untuk output tabel yang lebih seragam
+data class RekapitulasiTableRow(
+    val no: Int,
+    val kategori1: String, // Kolom utama (misal "Kategori", "Gangguan Status Gizi")
+    val kategori2: String? = null, // Kolom kedua jika ada (misal "Jenis Kelamin" untuk Umur atau Hb)
+    val kategori3: String? = null, // Kolom ketiga jika ada
+    val jumlah: Int
+) {
+    // Helper untuk menentukan header tabel berdasarkan kategori2 dan kategori3
+    fun getTableHeaders(): List<String> {
+        val headers = mutableListOf("No.", kategori1)
+        kategori2?.let { headers.add(it) }
+        kategori3?.let { headers.add(it) }
+        headers.add("Jumlah")
+        return headers
+    }
+}

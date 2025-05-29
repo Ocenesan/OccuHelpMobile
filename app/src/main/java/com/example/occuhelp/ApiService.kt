@@ -51,6 +51,9 @@ interface ApiService {
     suspend fun getMcuPatient(@Path("id") id: Int): Response<McuPatient>
 
     // ========== MCU Results ==========
+    @GET("mcu/raw-data")
+    suspend fun getMcuRawData(): Response<List<McuRawDataItem>>
+
     @GET("mcu-results")
     suspend fun getMcuResults(): Response<List<McuResult>>
 
