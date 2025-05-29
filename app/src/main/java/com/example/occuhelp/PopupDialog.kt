@@ -141,7 +141,7 @@ fun ConfirmationDialog(
                     .padding(horizontal = 8.dp)
                     .height(48.dp)
             ) {
-                Text(dismissButtonText, style = MaterialTheme.typography.labelLarge)
+                Text(dismissButtonText, style = MaterialTheme.typography.labelLarge, color = Color.White)
             }
 
             Spacer(modifier = Modifier.width(16.dp))

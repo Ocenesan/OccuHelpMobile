@@ -19,10 +19,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.occuhelp.ui.OccuHelpTheme
 import kotlinx.coroutines.launch
+import android.content.Intent // Untuk onNewIntent
+import android.net.Uri
 
 class MainActivity : ComponentActivity() {
+    private var deepLinkToken: String? = null
+    private var deepLinkEmail: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         setContent {
             OccuHelpTheme {
                 val navController = rememberNavController()
@@ -31,18 +37,17 @@ class MainActivity : ComponentActivity() {
                 val scope = rememberCoroutineScope()
 
                 val loginViewModel: LoginViewModel = viewModel()
-                val forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
                 val userSessionViewModel: UserSessionViewModel = viewModel()
                 val showChangePasswordDialog by loginViewModel.showChangePasswordConfirmationDialog.collectAsStateWithLifecycle()
 
                 if (showChangePasswordDialog) {
                     ConfirmationDialog(
-                        confirmationType = LoginPopUpType.GANTI_PASSWORD, // Pastikan GANTI_PASSWORD ada di LoginPopUpType
+                        confirmationType = LoginPopUpType.GANTI_PASSWORD,
                         confirmButtonText = "Ya",
                         dismissButtonText = "Batal",
                         onDismissRequest = { loginViewModel.onDismissChangePasswordConfirmation() },
                         onConfirm = {
-                            loginViewModel.onConfirmChangePassword() // ViewModel akan handle event navigasi
+                            loginViewModel.onConfirmChangePassword()
                         },
                         onDismiss = { loginViewModel.onDismissChangePasswordConfirmation() }
                     )
@@ -63,6 +68,20 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screen.ForgotPassword.route)
                             }
                         }
+                    }
+                }
+
+                // Navigasi awal berdasarkan deep link jika ada
+                LaunchedEffect(deepLinkToken, deepLinkEmail) {
+                    if (deepLinkToken != null && deepLinkEmail != null) {
+                        navController.navigate(
+                            Screen.UbahPassword.createRoute(deepLinkToken!!, deepLinkEmail!!)
+                        ) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                        this@MainActivity.deepLinkToken = null
+                        this@MainActivity.deepLinkEmail = null
                     }
                 }
 
@@ -149,10 +168,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.ForgotPassword.route) {
                             val forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
-                            val isLoading by forgotPasswordViewModel.isLoading.collectAsStateWithLifecycle()
                             // val apiError by forgotPasswordViewModel.apiError.collectAsStateWithLifecycle() // Jika pakai state error
 
-                            LaunchedEffect(Unit) {
+                            /*LaunchedEffect(Unit) {
                                 forgotPasswordViewModel.eventFlow.collect { event ->
                                     when (event) {
                                         is ForgotPasswordEvent.ShowFeedback -> {
@@ -163,26 +181,46 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                             ForgotPasswordScreen(
-                                // currentLoginError = apiError, // Jika pakai state error
-                                // onDismissErrorDialog = { forgotPasswordViewModel.dismissApiErrorDialog() }, // Jika pakai state error
-                                // Sebagai alternatif, ForgotPasswordScreen bisa punya dialog error sendiri atau hanya Toast
-                                currentLoginError = null, // Placeholder jika tidak menggunakan dialog error dari state ViewModel ini
-                                onDismissErrorDialog = {}, // Placeholder
                                 onBackClicked = {
-                                    if (!isLoading) navController.popBackStack()
+                                    navController.popBackStack()
                                 },
-                                isLoading = isLoading,
-                                onSendLinkClicked = { email ->
-                                    forgotPasswordViewModel.onSendLinkClicked(email, context)
+                                onNavigateToUbahPassword = { token, email ->
+                                    navController.navigate(Screen.UbahPassword.createRoute(token, email)) {
+                                        // Opsi: popUpTo ForgotPasswordScreen agar tidak kembali ke sana
+                                        popUpTo(Screen.ForgotPassword.route) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
                                 }
                             )
                         }
-                        composable(Screen.UbahPassword.route) {
+                        composable(
+                            route = Screen.UbahPassword.route, // Ini adalah routeWithArgs
+                            arguments = Screen.UbahPassword.arguments
+                        ) {
                             UbahPasswordScreen(
-                                onBackClicked = {
-                                    navController.popBackStack()
+                                onBackClicked = { navController.popBackStack(Screen.Login.route, inclusive = false) },
+                                // Tambahkan callback baru untuk navigasi setelah password berhasil direset
+                                onNavigateToPasswordUpdated = { // Implementasi callback
+                                    navController.navigate(Screen.PasswordUpdated.route) {
+                                        // Hapus UbahPasswordScreen dari back stack
+                                        popUpTo(Screen.UbahPassword.route) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
+                                }
+                            )
+                        }
+                        composable(Screen.PasswordUpdated.route) {
+                            PasswordUpdatedScreen(
+                                onLoginClicked = {
+                                    navController.navigate(Screen.Login.route) {
+                                        // Bersihkan seluruh back stack dan buat LoginScreen sebagai root baru
+                                        // Ini memastikan pengguna tidak bisa kembali ke PasswordUpdatedScreen
+                                        // atau layar sebelumnya dalam alur reset password.
+                                        popUpTo(0) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
                                 }
                             )
                         }
@@ -244,6 +282,31 @@ class MainActivity : ComponentActivity() {
                             DetailHasilMCUScreen(onNavigateBack = { navController.popBackStack() })
                         }
                     }
+                }
+            }
+        }
+    }
+    // ---> UBAH PARAMETER intent MENJADI Intent (NON-NULLABLE) <---
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent) // Panggil super dengan intent non-nullable
+        // Tidak perlu 'intent?.let' lagi karena intent dijamin non-null di sini
+        handleIntent(intent) // Tangani intent jika Activity sudah berjalan
+    }
+
+    // Parameter intent di sini juga sebaiknya non-nullable jika dipanggil dari onCreate dan onNewIntent
+    private fun handleIntent(intent: Intent) {
+        val action: String? = intent.action
+        val data: Uri? = intent.data
+
+        if (Intent.ACTION_VIEW == action && data != null) {
+            if (data.scheme == "occuhelp" && data.host == "reset-password") {
+                val token = data.getQueryParameter("token")
+                val email = data.getQueryParameter("email")
+
+                if (!token.isNullOrBlank() && !email.isNullOrBlank()) {
+                    this.deepLinkToken = token
+                    this.deepLinkEmail = email
+                    android.util.Log.d("DEEP_LINK", "Token: $token, Email: $email")
                 }
             }
         }

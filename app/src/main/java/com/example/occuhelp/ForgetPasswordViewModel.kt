@@ -3,7 +3,6 @@ package com.example.occuhelp
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 
 sealed class ForgotPasswordEvent {
     data class ShowFeedback(val message: String, val isError: Boolean) : ForgotPasswordEvent()
-    object NavigateBackToLogin : ForgotPasswordEvent()
+    data class NavigateToResetPassword(val token: String, val email: String) : ForgotPasswordEvent()
 }
 
 class ForgotPasswordViewModel : ViewModel() {
@@ -25,13 +24,17 @@ class ForgotPasswordViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    // State untuk mengontrol dialog sukses/error spesifik untuk layar ini
+    private val _dialogState = MutableStateFlow<LoginPopUpType?>(null)
+    val dialogState: StateFlow<LoginPopUpType?> = _dialogState.asStateFlow()
+
     // Menggunakan SharedFlow untuk event seperti Toast atau navigasi
     private val _eventFlow = MutableSharedFlow<ForgotPasswordEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     // Jika ingin dialog error yang sama, Anda bisa menggunakan MutableStateFlow<LoginPopUpType?>
     private val _apiError = MutableStateFlow<LoginPopUpType?>(null)
-    val apiError: StateFlow<LoginPopUpType?> = _apiError.asStateFlow()
+    //val apiError: StateFlow<LoginPopUpType?> = _apiError.asStateFlow()
 
     fun onSendLinkClicked(email: String, context: Context) {
         _apiError.value = null // Reset error jika menggunakan state error
@@ -54,11 +57,15 @@ class ForgotPasswordViewModel : ViewModel() {
                 val response = RetrofitClient.apiService.sendResetLink(request) // Pastikan URL benar
 
                 if (response.isSuccessful && response.body() != null) {
+                    _dialogState.value = LoginPopUpType.EMAIL_VERIFICATION
                     val baseResponse = response.body()!!
                     val message = baseResponse.message ?: "Link reset telah dikirim ke email Anda."
+                    val dummyToken = "dummy_reset_token_12345"
                     _eventFlow.emit(ForgotPasswordEvent.ShowFeedback(message, false))
-                    _eventFlow.emit(ForgotPasswordEvent.NavigateBackToLogin)
+                    // ini yang asli _eventFlow.emit(ForgotPasswordEvent.NavigateBackToLogin)
+                    _eventFlow.emit(ForgotPasswordEvent.NavigateToResetPassword(dummyToken, email))
                 } else {
+                    _dialogState.value = LoginPopUpType.EMAIL_FAILED
                     val errorBody = response.errorBody()?.string()
                     var serverMessage = "Gagal mengirim link reset. Coba lagi nanti."
                     if (!errorBody.isNullOrBlank()) {
@@ -71,17 +78,21 @@ class ForgotPasswordViewModel : ViewModel() {
                     }
                     println("Send reset link API error: ${response.code()} - ${response.message()} - Body: $errorBody")
                     _eventFlow.emit(ForgotPasswordEvent.ShowFeedback(serverMessage, true))
-                    _apiError.value = LoginPopUpType.NETWORK_ERROR
+                    _apiError.value = LoginPopUpType.EMAIL_FAILED
                 }
             } catch (e: Exception) {
                 _eventFlow.emit(ForgotPasswordEvent.ShowFeedback("Terjadi kesalahan: ${e.localizedMessage}", true))
-                _apiError.value = LoginPopUpType.NETWORK_ERROR
+                _apiError.value = LoginPopUpType.EMAIL_FAILED
                 println("Send reset link exception: ${e.localizedMessage}")
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
         }
+    }
+
+    fun dismissDialog() {
+        _dialogState.value = null
     }
 
     // fun dismissApiErrorDialog() {
@@ -92,19 +103,14 @@ class ForgotPasswordViewModel : ViewModel() {
     private fun isNetworkAvailable(context: Context): Boolean { // Duplikasi, idealnya di utility class
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val activeNetwork =
-                connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-            return networkInfo.isConnected
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork =
+            connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
         }
     }
 }

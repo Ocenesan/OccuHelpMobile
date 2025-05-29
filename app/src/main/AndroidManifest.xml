@@ -17,12 +17,23 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.OccuHelp.NoActionBar">
+            android:theme="@style/Theme.OccuHelp.NoActionBar"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Intent Filter untuk Deep Link Reset Password -->
+            <intent-filter android:autoVerify="true"> <!-- autoVerify untuk App Links (HTTPS) -->
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<data android:scheme="occuhelp" /> &lt;!&ndash; Skema kustom Anda &ndash;&gt;
+                <data android:host="reset-password" />-->
+                <!-- Jika menggunakan HTTPS App Link -->
+                <data android:scheme="https"
+                      android:host="occuhelp-capstone.up.railway.app"
+                      android:pathPrefix="/reset-password" />
             </intent-filter>
         </activity>
     </application>

@@ -19,19 +19,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.occuhelp.ui.OccuHelpBackButtonBackground
 import com.example.occuhelp.ui.OccuHelpBackButtonIcon
+import androidx.compose.runtime.LaunchedEffect // Untuk event dari ViewModel
+import androidx.compose.ui.platform.LocalContext // Untuk Toast
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import android.widget.Toast
 
 @OptIn(ExperimentalMaterial3Api::class) // Diperlukan untuk OutlinedTextFieldDefaults
 @Composable
 fun UbahPasswordScreen(
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit = {}, // Tambahkan callback untuk aksi kembali
-    onUpdatePasswordClicked: (String, String, String) -> Unit = { _, _, _ -> } // Callback untuk update
+    onBackClicked: () -> Unit = {},
+    onNavigateToPasswordUpdated: () -> Unit,
+    viewModel: UbahPasswordViewModel = viewModel()
 ) {
-    var oldPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var oldPasswordVisible by remember { mutableStateOf(false) }
+    // var oldPasswordVisible by remember { mutableStateOf(false) } // Tidak perlu
     var newPasswordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) } // Tambahkan untuk konfirmasi
+
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // Handle UI Events dari ViewModel
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UbahPasswordEvent.ShowFeedback -> {
+                    Toast.makeText(context, event.message, if (event.isError) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+                }
+                is UbahPasswordEvent.NavigateToPasswordUpdated -> {
+                    onNavigateToPasswordUpdated() // Panggil callback navigasi ke layar sukses
+                }
+            }
+        }
+    }
 
     Column(
         modifier = modifier // Gunakan modifier yang di-pass
@@ -41,10 +64,11 @@ fun UbahPasswordScreen(
     ) {
 
         IconButton(
-            onClick = { onBackClicked() },
+            onClick = { if (!isLoading) onBackClicked() },
             modifier = Modifier
                 .size(44.dp)
-                .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium)
+                .background(OccuHelpBackButtonBackground, shape = MaterialTheme.shapes.medium),
+            enabled = !isLoading
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -77,41 +101,6 @@ fun UbahPasswordScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Kata Sandi Lama
-        OutlinedTextField(
-            value = oldPassword,
-            onValueChange = { oldPassword = it },
-            label = {
-                Text(
-                    "Kata Sandi Lama",
-                    // style = MaterialTheme.typography.titleMedium, // Font & size dari titleMedium
-                    color = MaterialTheme.colorScheme.primary // Warna label
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium,
-            singleLine = true,
-            trailingIcon = {
-                IconButton(onClick = { oldPasswordVisible = !oldPasswordVisible }) {
-                    Icon(
-                        imageVector = if (oldPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                        contentDescription = if (oldPasswordVisible) "Sembunyikan kata sandi" else "Tampilkan kata sandi",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            },
-            visualTransformation = if (oldPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                cursorColor = MaterialTheme.colorScheme.primary,
-                focusedLabelColor = MaterialTheme.colorScheme.primary,
-            ),
-            textStyle = MaterialTheme.typography.bodyLarge // Style untuk teks yang diketik
-        )
-
-        Spacer(modifier = Modifier.height(16.dp)) // Jarak antar field
-
         // Kata Sandi Baru
         OutlinedTextField(
             value = newPassword,
@@ -125,6 +114,7 @@ fun UbahPasswordScreen(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             singleLine = true,
+            enabled = !isLoading,
             trailingIcon = {
                 IconButton(onClick = { newPasswordVisible = !newPasswordVisible }) {
                     Icon(
@@ -159,7 +149,16 @@ fun UbahPasswordScreen(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             singleLine = true,
-            visualTransformation = PasswordVisualTransformation(), // Selalu tersembunyi
+            enabled = !isLoading,
+            trailingIcon = { // Tambahkan visibility toggle untuk konfirmasi juga
+                IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+                    Icon(
+                        imageVector = if (confirmPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = if (confirmPasswordVisible) "Sembunyikan" else "Tampilkan"
+                    )
+                }
+            },
+            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline,
@@ -173,7 +172,7 @@ fun UbahPasswordScreen(
 
         // Tombol Perbarui Kata Sandi
         OutlinedButton(
-            onClick = { onUpdatePasswordClicked(oldPassword, newPassword, confirmPassword) },
+            onClick = { viewModel.onUpdatePasswordClicked(newPassword, confirmPassword) },
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary), // Atau outline jika beda
             shape = MaterialTheme.shapes.small, // Atau medium jika ingin sama dengan text field
             colors = ButtonDefaults.outlinedButtonColors(
@@ -181,7 +180,8 @@ fun UbahPasswordScreen(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp) // Tinggi tombol yang lebih baik
+                .height(48.dp) ,
+            enabled = !isLoading
         ) {
             Icon(
                 imageVector = Icons.Default.Lock,
@@ -202,7 +202,10 @@ fun UbahPasswordScreen(
 @Preview(showBackground = true)
 @Composable
 fun UbahPasswordScreenPreview() {
-    OccuHelpTheme { // Bungkus Preview juga dengan tema
-        UbahPasswordScreen(onBackClicked = {})
+    OccuHelpTheme {
+        UbahPasswordScreen(
+            onBackClicked = {},
+            onNavigateToPasswordUpdated = {}
+        )
     }
 }

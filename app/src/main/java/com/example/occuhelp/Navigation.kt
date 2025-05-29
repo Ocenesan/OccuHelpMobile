@@ -36,5 +36,15 @@ sealed class Screen(val route: String) {
             }
         )
     }
-    object UbahPassword : Screen("ubah_password_screen")
+    object UbahPassword : Screen("ubah_password_screen/{token}/{email}") { // Terima token & email
+        const val tokenArg = "token"
+        const val emailArg = "email"
+        fun createRoute(token: String, email: String) =
+            "ubah_password_screen/${Uri.encode(token)}/${Uri.encode(email)}"
+        val arguments = listOf(
+            navArgument(tokenArg) { type = NavType.StringType },
+            navArgument(emailArg) { type = NavType.StringType }
+        )
+    }
+    object PasswordUpdated : Screen("password_updated_screen")
 }
