@@ -254,7 +254,12 @@ class MainActivity : ComponentActivity() {
                             ReportScreen(onNavigateBack = { navController.popBackStack() })
                         }
                         composable(Screen.HasilMCU.route) {
-                            HasilMCUScreen(onNavigateBack = { navController.popBackStack() })
+                            HasilMCUScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                onNavigateToDetailMCU = { patientId, patientName ->
+                                    navController.navigate(Screen.DetailMCU.createRoute(patientId, patientName ?: "Detail Pasien"))
+                                }
+                            )
                         }
                         composable(Screen.Rekapitulasi.route) {
                             RekapitulasiScreen(

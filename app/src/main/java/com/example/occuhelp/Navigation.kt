@@ -22,18 +22,18 @@ sealed class Screen(val route: String) {
     object Report : Screen("report_screen")
     object Rekapitulasi : Screen("rekapitulasi_screen")
     object HasilMCU : Screen("hasil_mcu_screen")
-    object DetailMCU : Screen("detail_mcu_screen/{patientId}/{patientName}") {
+    object DetailMCU : Screen("detail_mcu_screen/{patientId}/{patientName}") { // Rute untuk detail spesifik satu hasil MCU
         const val patientIdArg = "patientId"
         const val patientNameArg = "patientName"
-        fun createRoute(patientId: Int, patientName: String) = // Jika patientName bisa null, ubah jadi String?
-            "detail_mcu_screen/$patientId/${Uri.encode(patientName)}" // Beri fallback jika null
+        // Jika DetailHasilMCUScreen menerima mcuResultId, bukan patientId:
+        // const val mcuResultIdArg = "mcuResultId"
+        // fun createRoute(mcuResultId: Int, patientId: Int, patientName: String) = "detail_mcu_screen/$mcuResultId/$patientId/${Uri.encode(patientName)}"
+        fun createRoute(patientId: Int, patientName: String) = // Jika masih menggunakan patientId & patientName
+            "detail_mcu_screen/$patientId/${Uri.encode(patientName)}"
         val arguments = listOf(
             navArgument(patientIdArg) { type = NavType.IntType },
-            navArgument(patientNameArg) {
-                type = NavType.StringType
-                // nullable = true // Tambahkan jika patientName bisa null
-                // defaultValue = "Unknown" // Atau berikan default
-            }
+            navArgument(patientNameArg) { type = NavType.StringType }
+            // navArgument(mcuResultIdArg) { type = NavType.IntType }, // Jika pakai mcuResultId
         )
     }
     object UbahPassword : Screen("ubah_password_screen/{token}/{email}") { // Terima token & email
