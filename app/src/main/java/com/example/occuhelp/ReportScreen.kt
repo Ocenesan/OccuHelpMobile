@@ -156,7 +156,7 @@ fun ReportScreen(
                         // Gunakan BarChartDataComposable yang sudah ada
                         BarChartDataComposable(
                             recapData = chartDataForCapture,
-                            chartTitle = chartTitleForCapture // Judul bisa ditampilkan atau tidak saat capture
+                            chartTitle = chartTitleForCapture
                         )
                     }
                 }
@@ -468,7 +468,7 @@ fun TableLayoutReport(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
-                .padding(vertical = 10.dp, horizontal = 8.dp),
+                .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
